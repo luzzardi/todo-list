@@ -1,3 +1,3 @@
-# react-ts-eclutf
+# Todo list
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/react-ts-eclutf)
+Learning react creating a todo list.
