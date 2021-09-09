@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Hello from './Hello';
+import AppState from './States/AppState';
+import List from './List/List';
 import './style.css';
 
-interface AppProps { }
-interface AppState {
-  name: string;
-}
+interface AppProps {}
 
 class App extends Component<AppProps, AppState> {
   constructor(props) {
@@ -20,12 +19,10 @@ class App extends Component<AppProps, AppState> {
     return (
       <div>
         <Hello name={this.state.name} />
-        <p>
-          Start editing to see some magic happen :)
-        </p>
+        <p>Start editing to see some magic happen :)</p>
       </div>
     );
   }
 }
 
-render(<App />, document.getElementById('root'));
+render(<List />, document.getElementById('todo-list'));
