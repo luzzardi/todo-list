@@ -4,15 +4,9 @@ import List from './List/List';
 import './style.css';
 
 let DATA = [
-  { id: 'todo-0', name: 'Eat', completed: true },
-  { id: 'todo-1', name: 'Sleep', completed: false },
-  { id: 'todo-2', name: 'Repeat', completed: false }
+  { id: 1, name: 'Eat', completed: true, key: 1 },
+  { id: 2, name: 'Sleep', completed: false, key: 2 },
+  { id: 3, name: 'Repeat', completed: false, key: 3 }
 ];
-
-if (localStorage.getItem('tasks')) {
-  DATA = JSON.parse(localStorage.getItem('tasks'));
-} else {
-  localStorage.setItem('tasks', JSON.stringify(DATA));
-}
 
 render(<List tasks={DATA} />, document.getElementById('todo-list'));

@@ -1,70 +1,96 @@
 import React, { Component, useState } from 'react';
-import Todo from './Todo';
+import { Todo } from './Todo';
 import Form from './Form';
 import FilterButton from './FilterButton';
-import { nanoid } from 'nanoid';
+import Task from '../Models/task';
 
-export default function List(props) {
-  const [tasks, setTasks] = useState(props.tasks);
+interface ListState {
+  newTask: Task;
+  tasks: Task[];
+}
 
-  const taskList = tasks.map(task => {
-    return (
-      <Todo
-        id={task.id}
-        name={task.name}
-        completed={task.completed}
-        key={task.id}
-        toggleTaskCompleted={toggleTaskCompleted}
-        deleteTask={deleteTask}
-      />
-    );
-  });
+export default class List extends Component<{ tasks: Task[] }, ListState> {
+  state = {
+    newTask: {
+      id: 1,
+      name: '',
+      completed: false,
+      key: 1
+    },
+    tasks: []
+  };
 
-  function addTask(name) {
-    const newTask = { id: 'todo-' + nanoid(), name: name, completed: false };
-    setTasks([...tasks, newTask]);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+  constructor(props) {
+    super(props);
+    this.toggleTaskCompleted = this.toggleTaskCompleted.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
+    this.state.tasks = props.tasks || [];
   }
 
-  function toggleTaskCompleted(id) {
-    const updatedTasks = tasks.map(task => {
-      // if this task has the same ID as the edited task
-      if (id === task.id) {
-        // use object spread to make a new object
-        // whose `completed` prop has been inverted
-        return { ...task, completed: !task.completed };
-      }
-      return task;
+  private addTask = name => {
+    this.setState(previousState => ({
+      newTask: {
+        id: previousState.newTask.id + 1,
+        name: '',
+        completed: previousState.newTask.completed,
+        key: previousState.newTask.id + 1
+      },
+      tasks: [...previousState.tasks, { ...previousState.newTask, name }]
+    }));
+  };
+
+  private toggleTaskCompleted(taskToComplete: Task) {
+    this.setState(previousState => ({
+      tasks: [
+        ...previousState.tasks.map(task => {
+          if (task.id === taskToComplete.id) {
+            return { ...task, completed: !task.completed };
+          }
+          return task;
+        })
+      ]
+    }));
+  }
+
+  private deleteTask = (taskToDelete: Task) => {
+    this.setState(previousState => ({
+      tasks: [
+        ...previousState.tasks.filter(task => task.id !== taskToDelete.id)
+      ]
+    }));
+  };
+
+  render() {
+    const taskList = this.state.tasks.map(task => {
+      return (
+        <Todo
+          task={task}
+          toggleTaskCompleted={this.toggleTaskCompleted}
+          deleteTask={this.deleteTask}
+        />
+      );
     });
-    setTasks(updatedTasks);
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-  }
-
-  function deleteTask(id) {
-    const remainingTasks = tasks.filter(task => id !== task.id);
-    setTasks(remainingTasks);
-    localStorage.setItem('tasks', JSON.stringify(remainingTasks));
-  }
-
-  return (
-    <div className="todoapp stack-large">
-      <h1>TodoMatic</h1>
-      <Form addTask={addTask} />
-      <div className="filters btn-group stack-exception">
-        <FilterButton />
-        <FilterButton />
-        <FilterButton />
+    return (
+      <div className="todoapp stack-large">
+        <h1>TodoMatic</h1>
+        <Form addTask={this.addTask} />
+        <div className="filters btn-group stack-exception">
+          <FilterButton />
+          <FilterButton />
+          <FilterButton />
+        </div>
+        <h2 id="list-heading">
+          {this.state.tasks.length} task{this.state.tasks.length > 1 ? 's' : ''}{' '}
+          remaining
+        </h2>
+        <ul
+          role="list"
+          className="todo-list stack-large stack-exception"
+          aria-labelledby="list-heading"
+        >
+          {taskList}
+        </ul>
       </div>
-      <h2 id="list-heading">
-        {tasks.length} task{tasks.length > 1 ? 's' : ''} remaining
-      </h2>
-      <ul
-        role="list"
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
-        {taskList}
-      </ul>
-    </div>
-  );
+    );
+  }
 }
