@@ -23,6 +23,7 @@ export default function List(props) {
   function addTask(name) {
     const newTask = { id: 'todo-' + nanoid(), name: name, completed: false };
     setTasks([...tasks, newTask]);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
   }
 
   function toggleTaskCompleted(id) {
@@ -36,11 +37,13 @@ export default function List(props) {
       return task;
     });
     setTasks(updatedTasks);
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
   }
 
   function deleteTask(id) {
     const remainingTasks = tasks.filter(task => id !== task.id);
     setTasks(remainingTasks);
+    localStorage.setItem('tasks', JSON.stringify(remainingTasks));
   }
 
   return (
