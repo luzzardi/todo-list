@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { AppProps, TodoState } from '../States/';
 
 export default function Todo(props) {
   return (
