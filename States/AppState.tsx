@@ -1,3 +1,1 @@
-export default interface AppState {
-  name: string;
-}
+export default interface AppState {}

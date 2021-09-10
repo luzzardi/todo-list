@@ -7,22 +7,28 @@ import './style.css';
 
 interface AppProps {}
 
-class App extends Component<AppProps, AppState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: 'React'
-    };
-  }
+const DATA = [
+  { id: 'todo-0', name: 'Eat', completed: true },
+  { id: 'todo-1', name: 'Sleep', completed: false },
+  { id: 'todo-2', name: 'Repeat', completed: false }
+];
 
-  render() {
-    return (
-      <div>
-        <Hello name={this.state.name} />
-        <p>Start editing to see some magic happen :)</p>
-      </div>
-    );
-  }
-}
+// class App extends Component<AppProps, AppState> {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       name: 'React'
+//     };
+//   }
 
-render(<List />, document.getElementById('todo-list'));
+//   render() {
+//     return (
+//       <div>
+//         <Hello name={this.state.name} />
+//         <p>Start editing to see some magic happen :)</p>
+//       </div>
+//     );
+//   }
+// }
+
+render(<List tasks={DATA} />, document.getElementById('todo-list'));
